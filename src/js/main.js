@@ -97,7 +97,9 @@ var draw = (function() {
           this.drawPath();
         } else if( shape==='circle' ) {
           this.drawCircle();
-        } else {
+        } else if( shape==='triangle' ) {
+            this.drawTriangle();
+          } else {
           alert('Please choose a shape');
         }
         ctx.save();
@@ -147,6 +149,41 @@ var draw = (function() {
         ctx.fillRect (x1,y1,(x2-x1),(y2-y1));
       },
   
+      //Draw a Triangle
+      drawTriangle: function() {
+
+        //x1, y1 to x2, y2 is the first line. use first point +/-
+        //movement left or right the result of pt. to add third point
+        var a = (x1-x2);
+        var b = (y1-y2);
+        var c = Math.sqrt( a*a + b*b );
+
+        var d = x1+c;
+        var e = y1+c;
+
+        //move left or right
+        if(x1>x2){
+            d = x1-c;
+        }
+
+        //move up or down
+        if(x1>x2){
+            d = y1-c;
+        }
+        //Start by using random fill colors.
+        ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+        ctx.strokeStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+
+        ctx.lineTo(d, e);
+        ctx.lineTo(x2, y2);
+
+        ctx.lineTo(x1, y1);
+        ctx.stroke();
+        ctx.fill();
+      },
+
       getCanvas: function(){
         return canvas;
       },
@@ -207,3 +244,6 @@ var draw = (function() {
       draw.setShape('path');
   }, false);
   
+  document.getElementById('btnTriangle').addEventListener('click', function(){
+    draw.setShape('triangle');
+  }, false);
